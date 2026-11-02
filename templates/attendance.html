@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Attendance – Plate Club{% endblock %}
+{% block body %}
+<main class="wrap">
+  <div class="top">
+    <h1 style="font-size:clamp(44px,8vw,72px)">Attendance</h1>
+    <a class="btn ghost sm" href="{{ url_for('admin') }}">← Back to admin</a>
+  </div>
+  <form method="get" class="filters">
+    <div class="field"><label for="d">Day</label><input id="d" type="date" name="date" value="{{ day }}"></div>
+    <div class="field"><label for="m">Month</label><input id="m" type="month" name="month" value="{{ month }}"></div>
+    <button class="btn sm">Show</button>
+    <a class="btn ghost sm" href="{{ url_for('attendance_csv', month=month) }}">Download {{ month }} as CSV</a>
+  </form>
+  <div class="stats">
+    <div class="stat"><b>{{ visits|length }}</b>Visits on {{ day|nice_date }}</div>
+    <div class="stat"><b>{{ summary|selectattr('visits')|list|length }}</b>Members who visited in {{ month }}</div>
+    <div class="stat"><b>{{ away|length }}</b>Not seen in 7 days</div>
+  </div>
+  <div class="cols">
+    <div class="scroll"><table>
+      <thead><tr><th colspan="3">Who came on {{ day|nice_date }}</th></tr><tr><th>Time</th><th>Member</th><th>Method</th></tr></thead>
+      <tbody>{% for v in visits %}<tr><td>{{ v.t[:5] }}</td><td><strong>{{ v.name }}</strong><br><span class="note">{{ v.code }} · {{ v.plan }}</span></td><td>{{ 'Self check-in' if v.source == 'self' else 'Front desk' }}</td></tr>
+      {% else %}<tr><td colspan="3" class="empty">No visits recorded.</td></tr>{% endfor %}</tbody>
+    </table></div>
+    <div class="scroll"><table>
+      <thead><tr><th colspan="2">Visits per member in {{ month }}</th></tr><tr><th>Member</th><th>Days</th></tr></thead>
+      <tbody>{% for s in summary %}<tr><td><strong>{{ s.name }}</strong><br><span class="note">{{ s.code }} · {{ s.plan }}</span></td><td>{{ s.visits }}</td></tr>
+      {% else %}<tr><td colspan="2" class="empty">No active members.</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </div>
+  <div class="scroll"><table>
+    <thead><tr><th colspan="3">Haven’t visited in 7 days (a good time to call or message them)</th></tr><tr><th>Member</th><th>Phone</th><th>Last visit</th></tr></thead>
+    <tbody>{% for a in away %}<tr><td><strong>{{ a.name }}</strong><br><span class="note">{{ a.code }} · {{ a.plan }}</span></td><td><a href="tel:+91{{ a.phone }}">{{ a.phone }}</a></td><td>{{ a.last_visit|nice_date if a.last_visit else 'Never since joining' }}</td></tr>
+    {% else %}<tr><td colspan="3" class="empty">Everyone has visited recently.</td></tr>{% endfor %}</tbody>
+  </table></div>
+</main>
+{% endblock %}

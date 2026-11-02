@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block body %}
+<main class="wrap">
+  <section class="panel">
+    <h2>Your details</h2>
+    <p class="sum">{{ plan.name }} plan · {{ price|inr }} {{ 'per year' if billing == 'annual' else 'per month' }}</p>
+    <form method="post" action="{{ url_for('join') }}">
+      <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+      <input type="hidden" name="plan" value="{{ plan.id }}"><input type="hidden" name="billing" value="{{ billing }}">
+      <div class="field"><label for="f-name">Full name</label><input id="f-name" name="name" autocomplete="name" required value="{{ form.name }}"></div>
+      <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required value="{{ form.email }}"></div>
+      <div class="field"><label for="f-phone">Mobile number</label><input id="f-phone" name="phone" inputmode="numeric" autocomplete="tel" maxlength="10" required value="{{ form.phone }}"></div>
+      <p class="note">You’ll pay securely with Razorpay (UPI, cards, netbanking, wallets). We never see your card details.</p>
+      <p class="err" role="alert">{{ error or '' }}</p>
+      <div class="actions"><button class="btn">Continue to payment</button><a class="btn ghost" href="{{ url_for('index', billing=billing) }}">Back</a></div>
+    </form>
+  </section>
+</main>
+{% endblock %}

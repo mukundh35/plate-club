@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{% block title %}Plate Club – Gym Membership{% endblock %}</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<header>
+  <a class="brand" href="{{ url_for('index') }}">Plate Club</a>
+  <nav aria-label="Main">
+    <a href="{{ url_for('index') }}"{% if request.endpoint == 'index' %} aria-current="page"{% endif %}>Join</a>
+    <a href="{{ url_for('self_checkin') }}"{% if request.endpoint == 'self_checkin' %} aria-current="page"{% endif %}>Check in</a>
+    <a href="{{ url_for('admin') }}"{% if request.endpoint and request.endpoint.startswith('admin') %} aria-current="page"{% endif %}>Admin</a>
+  </nav>
+</header>
+{% with msgs = get_flashed_messages() %}{% if msgs %}<div class="wrap"><p class="err" role="alert">{{ msgs[0] }}</p></div>{% endif %}{% endwith %}
+{% block body %}{% endblock %}
+<footer class="contact">
+  <h2>Contact the admin</h2>
+  <p><b>Phone</b><a href="tel:+917013230276">7013230276</a></p>
+  <p><b>Email</b><a href="mailto:plateclub@gmail.com">plateclub@gmail.com</a></p>
+  <p><b>Front desk hours</b>Every day, 6am–10pm</p>
+  <p><b>Address</b>Gajuwaka, Andhra Pradesh</p>
+</footer>
+</body>
+</html>

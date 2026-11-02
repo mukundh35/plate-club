@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block body %}
+<main class="wrap">
+  <section class="panel">
+    <h2>You’re in, {{ m.name.split(' ')[0] }}.</h2>
+    <p class="sum">Payment received. Show this pass at the front desk.</p>
+    {% set l = look[m.plan] %}
+    <div class="pass" style="--c:{{ l.c }};--fg:{{ l.fg }}">
+      <h3>Plate Club · {{ plan.name }}</h3><p>{{ m.name }}</p><p>{{ m.code }}</p><p>Valid until {{ m.end_date|nice_date }}</p>
+    </div>
+    <a class="btn" href="{{ url_for('index') }}">Back to home</a>
+  </section>
+</main>
+{% endblock %}

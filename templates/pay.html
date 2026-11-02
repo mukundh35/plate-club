@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block body %}
+<main class="wrap">
+  <section class="panel">
+    <h2>Payment</h2>
+    <p class="sum">{{ plan.name }} · {{ 'annual' if p.billing == 'annual' else 'monthly' }} · {{ p.amount_paise|inr }} for {{ p.name }}</p>
+    {% if demo %}
+    <p class="note">Demo mode: no real money moves.</p>
+    <form method="post" action="{{ url_for('pay_demo', order_id=p.order_id) }}">
+      <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+      <button class="btn">Pay {{ p.amount_paise|inr }} (demo)</button>
+    </form>
+    {% else %}
+    <form action="{{ url_for('razorpay_callback') }}" method="POST">
+      <script src="https://checkout.razorpay.com/v1/checkout.js"
+        data-key="{{ key_id }}" data-amount="{{ p.amount_paise }}" data-currency="INR" data-order_id="{{ p.order_id }}"
+        data-buttontext="Pay {{ p.amount_paise|inr }}" data-name="Plate Club" data-description="{{ plan.name }} membership"
+        data-prefill.name="{{ p.name }}" data-prefill.email="{{ p.email }}" data-prefill.contact="{{ p.phone }}"
+        data-theme.color="#2f5bff"></script>
+    </form>
+    <p class="note">Pay with UPI, cards, netbanking or wallets. We never see your card details.</p>
+    {% endif %}
+  </section>
+</main>
+{% endblock %}

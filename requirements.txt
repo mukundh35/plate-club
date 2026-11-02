@@ -1,0 +1,5 @@
+Flask>=3.0
+python-dotenv>=1.0
+razorpay>=1.4
+setuptools
+gunicorn>=22.0
