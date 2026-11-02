@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block body %}
+<main class="wrap">
+  <section class="panel">
+    {% if action == 'delete' %}<h2>Delete member?</h2><p class="sum">{{ m.name }} ({{ m.code }}) and all their records will be removed permanently.</p>
+    {% elif action == 'cancel' %}<h2>Cancel membership?</h2><p class="sum">{{ m.name }} ({{ m.code }}) will be marked as cancelled.</p>
+    {% else %}<h2>Record a renewal?</h2><p class="sum">This records an offline payment (cash or UPI at the desk) for {{ m.name }} and extends their membership.</p>{% endif %}
+    <form method="post" action="{{ url_for('admin_action', mid=m.id, action=action) }}" class="actions">
+      <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+      <button class="btn{{ ' ghost danger' if action != 'renew' else '' }}">Yes, {{ action }}</button>
+      <a class="btn ghost" href="{{ url_for('admin') }}">No, go back</a>
+    </form>
+  </section>
+</main>
+{% endblock %}

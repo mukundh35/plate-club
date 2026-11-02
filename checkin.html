@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Member check-in – Plate Club{% endblock %}
+{% block body %}
+<main class="wrap">
+  <section class="panel">
+    {% if result %}
+      <h2>{{ 'Already checked in today' if result.already else 'Checked in. Have a great workout' }}, {{ result.name.split(' ')[0] }}.</h2>
+      <div class="stats">
+        <div class="stat"><b>{{ result.streak }}</b>Day streak</div>
+        <div class="stat"><b>{{ result.month }}</b>Visits this month</div>
+        <div class="stat"><b>{{ result.total }}</b>Total visits</div>
+      </div>
+      <a class="btn" href="{{ url_for('self_checkin') }}">Done</a>
+    {% else %}
+      <h2>Member check-in</h2>
+      <p class="sum">Enter your member ID and the mobile number you joined with.</p>
+      <form method="post" action="{{ url_for('self_checkin') }}">
+        <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+        <div class="field"><label for="c-code">Member ID (like GYM-1A2B3C)</label><input id="c-code" name="code" autocomplete="off" required></div>
+        <div class="field"><label for="c-phone">Mobile number</label><input id="c-phone" name="phone" inputmode="numeric" maxlength="10" autocomplete="off" required></div>
+        <p class="err" role="alert">{{ error or '' }}</p>
+        <button class="btn">Check in</button>
+      </form>
+    {% endif %}
+  </section>
+</main>
+{% endblock %}

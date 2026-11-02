@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block body %}
+<main class="wrap">
+  <p class="kicker">Gajuwaka · Open daily 6am–10pm</p>
+  <h1>Pick your <em>plate.</em></h1>
+  <p class="lead">Strong isn’t a gift. It’s one more plate, added every day.</p>
+  <div class="strip">
+    <span>4 plans</span><span>Annual billing: 2 months free</span><span>Pay with UPI, cards or netbanking</span>
+    <a class="btn" href="#plans">See plans</a><a class="btn ghost" href="{{ url_for('self_checkin') }}">Member check-in</a>
+  </div>
+  <form method="get" class="toggle" role="group" aria-label="Billing period">
+    <button name="billing" value="monthly" aria-pressed="{{ 'true' if billing == 'monthly' else 'false' }}">Monthly</button>
+    <button name="billing" value="annual" aria-pressed="{{ 'true' if billing == 'annual' else 'false' }}">Annual</button>
+  </form>
+  <div class="plans" id="plans">
+    {% for p in plans %}{% set l = look[p.id] %}
+    <article class="plan{{ ' hot' if p.id == 'pro' else '' }}">
+      {% if p.id == 'pro' %}<span class="badge">Recommended</span>{% endif %}
+      <div class="plate" style="--c:{{ l.c }};--fg:{{ l.fg }}" aria-hidden="true">{{ l.kg }}</div>
+      <h2>{{ p.name }}</h2>
+      <div class="price">{{ prices[p.id]|inr }}<span> / {{ 'year' if billing == 'annual' else 'month' }}</span></div>
+      <ul>{% for x in l.perks %}<li>{{ x }}</li>{% endfor %}</ul>
+      <form method="get" action="{{ url_for('join') }}">
+        <input type="hidden" name="plan" value="{{ p.id }}"><input type="hidden" name="billing" value="{{ billing }}">
+        <button class="btn" style="width:100%">Join {{ p.name }}</button>
+      </form>
+    </article>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}

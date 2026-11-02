@@ -1,0 +1,17 @@
+# Your private settings. Never share or upload this file.
+
+# Admin login for http://127.0.0.1:5000/admin/login
+ADMIN_EMAIL=kommumukundh@gmail.com
+ADMIN_PASSWORD=kommu@999
+
+# true = fake payments (no real money), for testing on your own computer
+DEMO_PAYMENTS=true
+
+# Razorpay keys (only needed when DEMO_PAYMENTS=false)
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+RAZORPAY_WEBHOOK_SECRET=
+
+APP_ENV=development
+PORT=5000
+DB_PATH=./plateclub.db
